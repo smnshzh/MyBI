@@ -52,4 +52,14 @@ class Good(models.Model):
         return self.name     
 
 
+# ------ اطلاعات مراکز
+    
+class Dc(models.Model):
 
+    code= models.IntegerField(unique=True)  
+    name = models.CharField(max_length=225)
+    groups = models.ManyToManyField(to=GoodsMainGroup)
+    lines = models.ManyToManyField(to=GoodsDivideGroup)
+    class Meta:
+        verbose_name = "مرکز اصلی"
+        verbose_name_plural = "مراکز اصلی"
