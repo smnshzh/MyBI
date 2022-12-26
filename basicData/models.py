@@ -4,8 +4,8 @@ class GoodsMainGroup(models.Model):
     code = models.IntegerField(unique=True)
     name = models.CharField(max_length=225)
     class Meta:
-        verbose_name = "1-گروه اصلی محصول"
-        verbose_name_plural = '1-گروه های اصلی'
+        verbose_name = "گروه اصلی محصول"
+        verbose_name_plural = 'گروه های اصلی'
     def __str__(self):
         return self.name    
 class GoodsSubGroup(models.Model):
@@ -15,8 +15,8 @@ class GoodsSubGroup(models.Model):
     name = models.CharField(max_length=225)
 
     class Meta:
-        verbose_name = "2-زیر گروه محصول"
-        verbose_name_plural = "2-زیر گروه محصولات"
+        verbose_name = "زیر گروه محصول"
+        verbose_name_plural = "زیر گروه محصولات"
     def __str__(self):
         return self.name     
 
@@ -28,8 +28,8 @@ class GoodsDivideGroup(models.Model):
     class  Meta:
         db_table = ''
         managed = True
-        verbose_name = '3-گروه جدا کننده'
-        verbose_name_plural = '3-جداکنندگان'
+        verbose_name = 'گروه جدا کننده'
+        verbose_name_plural = 'جداکنندگان'
     def __str__(self):
         return self.name     
     
@@ -46,8 +46,8 @@ class Good(models.Model):
 
     class Meta:
 
-        verbose_name = "4-نام محصول"
-        verbose_name_plural = '4-نام محصولات'
+        verbose_name = "نام محصول"
+        verbose_name_plural = 'نام محصولات'
     def __str__(self):
         return self.name     
 
@@ -61,32 +61,32 @@ class Dc(models.Model):
     ggroups = models.ManyToManyField(to=GoodsMainGroup,related_name="GoodsCanSAle")
     activation = models.BooleanField(default=False)
     class Meta:
-        verbose_name = "5-مرکز اصلی"
-        verbose_name_plural = "5-مراکز اصلی"
+        verbose_name = "مرکز اصلی"
+        verbose_name_plural = "مراکز اصلی"
     def __str__(self):
         return self.name
 class Barache(models.Model):
 
-    code = models.IntegerField()
+    code = models.IntegerField(unique=True)
     name = models.CharField(max_length = 225)
     mainDc = models.ForeignKey(to=Dc,on_delete=models.DO_NOTHING)
     activation = models.BooleanField(default=False)
     class Meta:
-        verbose_name = "6-مرکز فروش"
-        verbose_name_plural = "6-مراکز فروش"
+        verbose_name = "مرکز فروش"
+        verbose_name_plural = "مراکز فروش"
     def __str__(self):
         return self.name
 
 
 class DistrictManager(models.Model):
-    code = models.IntegerField()
+    code = models.IntegerField(unique=True)
     name = models.CharField(max_length=225)
     activation = models.BooleanField(default=False)
     MainDcs = models.ManyToManyField(Dc,related_name="MainDC")
 
     class Meta:
-        verbose_name= "7-مدیر منطقه"
-        verbose_name_plural = "7-مدیران مناطق"
+        verbose_name= "مدیر منطقه"
+        verbose_name_plural = "مدیران مناطق"
     def __str__(self):
         return self.name
 CHOISE = [
@@ -94,52 +94,75 @@ CHOISE = [
     (2,"رئیس")
 ]
 class Manager(models.Model):
-    code = models.IntegerField()
+    code = models.IntegerField(unique=True)
     name = models.CharField(max_length=225)
     activation = models.BooleanField(default=False)
     MainDc = models.ForeignKey(Dc,on_delete=models.DO_NOTHING)
     position = models.CharField(max_length=4,choices=CHOISE)
     class Meta:
-        verbose_name="8-مدیر شعبه"
-        verbose_name_plural = "8-مدیریت شعب"
+        verbose_name="مدیر شعبه"
+        verbose_name_plural = "مدیریت شعب"
     def __str__(self):
         return f"{self.position} {self.name}"
 class Superviseur(models.Model):
-    code = models.IntegerField()
+    code = models.IntegerField(unique=True)
     name = models.CharField(max_length=225)
     activation = models.BooleanField(default=False)
-    MainDc = models.ForeignKey(Dc, on_delete=models.DO_NOTHING)
+    MainDc = models.ForeignKey(Barache, on_delete=models.DO_NOTHING)
     class Meta:
-        verbose_name = "9-سرپرست"
-        verbose_name_plural = "9-سرپرستان"
+        verbose_name = "سرپرست"
+        verbose_name_plural = "سرپرستان"
 
     def __str__(self):
         return self.name
 
 class SaleLine(models.Model):
 
-    code = models.IntegerField()
+    code = models.IntegerField(unique=True)
     name = models.CharField(max_length=225)
     divideGroup = models.ManyToManyField(GoodsDivideGroup)
     class Meta:
-        verbose_name = "10-لاین فروش"
-        verbose_name_plural = "10-لاین های فروش"
+        verbose_name = "لاین فروش"
+        verbose_name_plural = "لاین های فروش"
     def __str__(self):
         return self.name
 
 class CostumersActivity(models.Model):
-    code = models.IntegerField()
+    code = models.IntegerField(unique=True)
     name = models.CharField(max_length=225)
     class Meta:
-        verbose_name = "11-فعالیت مشتری"
-        verbose_name_plural = f"11-فعالیتها"
+        verbose_name = "فعالیت مشتری"
+        verbose_name_plural = f"فعالیتها"
     def __str__(self):
         return self.name
 
 class SalerActivity(models.Model):
-    code = models.IntegerField()
+    code = models.IntegerField(unique=True)
     name = models.CharField(max_length=225)
     costumerActivity = models.ManyToManyField(CostumersActivity)
 
     class Meta:
-        verbose_name = ""
+        verbose_name = "فعالیت فروشنده"
+        verbose_name_plural = "فعالیت فروشندگان"
+
+    def __str__(self):
+        return self.name
+
+class Saler(models.Model):
+    scode = models.IntegerField(unique=True)
+    pcode = models.IntegerField()
+    name = models.CharField(max_length=225)
+    branch = models.ForeignKey(Barache,on_delete=models.DO_NOTHING)
+    superviseur = models.ForeignKey(Superviseur,on_delete=models.DO_NOTHING)
+    activity = models.ForeignKey(SalerActivity,on_delete=models.DO_NOTHING)
+    def __str__(self):
+        return self.name
+    class Meta:
+        verbose_name = "فروشنده"
+        verbose_name_plural = "فروشندگان"
+
+
+
+
+
+
